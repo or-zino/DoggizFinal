@@ -11,12 +11,14 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.doggiz_app.Backend.MainActivity;
+import com.example.doggiz_app.Models.Counters;
 import com.example.doggiz_app.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,7 +46,10 @@ public class MyDog extends AppCompatActivity {
     private ImageView imgDeleteDog[] = new ImageView[9];
     private LinearLayout linearLayout;
     private View view;
-    private TextView dogName, owenerName, breed, vetName, dateOfBirth;
+    private TextView dogName, owenerName;
+    private TextView foodCounter[] = new TextView[9];
+    private TextView walkCounter[] = new TextView[9];
+    public Counters[] counters = new Counters[9];
     private View[] views = new View[9];
     private FirebaseDatabase database;
     private DatabaseReference dogRef, userRef;
@@ -71,6 +76,7 @@ public class MyDog extends AppCompatActivity {
         userRef     = database.getReference(USERS);
         dogRef      = database.getReference(DOG);
 
+
         showDogs();
 
 
@@ -93,18 +99,93 @@ public class MyDog extends AppCompatActivity {
                                             counter++;
                                             linearLayout = findViewById(R.id.myDogsLayout);
                                             view = getLayoutInflater().inflate(R.layout.item_image, null);
+                                            counters[index] =  new Counters();
+                                            foodCounter[index] = view.findViewById(R.id.foodCount);
+                                            foodCounter[index].setText(ds2.child("food").getValue().toString());
+                                            walkCounter[index] = view.findViewById(R.id.walkCounter);
+                                            walkCounter[index].setText(ds2.child("walk").getValue().toString());
 
-                                            breed = view.findViewById(R.id.breedTextView);
-                                            breed.setText(ds2.child("breed").getValue().toString());
-                                            vetName = view.findViewById(R.id.vetTextView);
-                                            vetName.setText(ds2.child("vet").getValue().toString());
-                                            dateOfBirth = view.findViewById(R.id.dateTextView);
-                                            dateOfBirth.setText(ds2.child("dateOfBirth").getValue().toString());
                                             dogName = view.findViewById(R.id.dogName);
                                             dogName.setText(ds2.child("dogName").getValue().toString());
                                             owenerName = view.findViewById(R.id.ownerName);
                                             owenerName.setText(owner);
                                             views[index] = view;
+                                            counters[index].setDogName(dogName.getText().toString());
+                                            counters[index].setFoodCounter(Integer.valueOf(ds2.child("food").getValue().toString()));
+                                            counters[index].setWalkCounter(Integer.valueOf(ds2.child("walk").getValue().toString()));
+
+                                            counters[index].setFoodM(views[index].findViewById(R.id.foodMinus));
+                                            counters[index].getFoodM().setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    for(int i = 0; i< counters.length;i++) {
+                                                        if(counters[i] != null){
+                                                            if (counters[i].getFoodM().equals(v)) {
+                                                                if(counters[i].getFoodCounter() > 0) {
+                                                                    counters[i].setFoodCounter(counters[i].getFoodCounter() - 1);
+                                                                    int foodNumber = counters[i].getFoodCounter();
+                                                                    foodCounter[i].setText(String.valueOf(foodNumber));
+                                                                    dogRef.child(ds2.getKey()).child("food").setValue(foodNumber);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+
+                                            counters[index].setFoodP(views[index].findViewById(R.id.foodPluse));
+                                            counters[index].getFoodP().setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    for(int i = 0; i< counters.length;i++) {
+                                                        if(counters[i] != null){
+                                                            if (counters[i].getFoodP().equals(v)) {
+                                                                counters[i].setFoodCounter(counters[i].getFoodCounter() + 1);
+                                                                int foodNumber = counters[i].getFoodCounter();
+                                                                foodCounter[i].setText(String.valueOf(foodNumber));
+                                                                dogRef.child(ds2.getKey()).child("food").setValue(foodNumber);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+
+                                            counters[index].setWalkM(views[index].findViewById(R.id.walkMinus));
+                                            counters[index].getWalkM().setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    for(int i = 0; i< counters.length;i++) {
+                                                        if(counters[i] != null){
+                                                            if (counters[i].getWalkM().equals(v)) {
+                                                                if(counters[i].getWalkCounter() > 0) {
+                                                                    counters[i].setWalkCounter(counters[i].getWalkCounter() - 1);
+                                                                    int walkNumber = counters[i].getWalkCounter();
+                                                                    walkCounter[i].setText(String.valueOf(walkNumber));
+                                                                    dogRef.child(ds2.getKey()).child("walk").setValue(walkNumber);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+
+                                            counters[index].setWalkP(views[index].findViewById(R.id.walkPluse));
+                                            counters[index].getWalkP().setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    for(int i = 0; i< counters.length;i++) {
+                                                        if(counters[i] != null){
+                                                            if (counters[i].getWalkP().equals(v)) {
+                                                                counters[i].setWalkCounter(counters[i].getWalkCounter() + 1);
+                                                                int walkNumber = counters[i].getWalkCounter();
+                                                                walkCounter[i].setText(String.valueOf(walkNumber));
+                                                                dogRef.child(ds2.getKey()).child("walk").setValue(walkNumber);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+
                                             index++;
                                             linearLayout.addView(view);
 
