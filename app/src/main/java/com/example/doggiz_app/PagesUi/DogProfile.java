@@ -1,5 +1,8 @@
 package com.example.doggiz_app.PagesUi;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,14 +11,18 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.doggiz_app.Backend.MainActivity;
 import com.example.doggiz_app.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -46,10 +53,10 @@ public class DogProfile extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference dogRef, userRef;
     private StorageReference storageReference;
-    private Button editBtn;
+    private Button editBtn, shareBtn;
 
-    public String email;
-    public String owner;
+    public String email, keyId,share;
+    public String myText;
     public String imageName;
     private int counter = 0, index = 0;
 
@@ -78,6 +85,7 @@ public class DogProfile extends Fragment {
         imDog       = v.findViewById(R.id.dogProfileImage);
         imMyPro     = v.findViewById(R.id.myProfile);
         editBtn     = v.findViewById(R.id.dogProfileEditBtn);
+        shareBtn    = v.findViewById(R.id.dogProfileShareBtn);
 
 
         imMyPro.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +117,8 @@ public class DogProfile extends Fragment {
                         breed.setText(ds.child("breed").getValue().toString());
                         vetName.setText(ds.child("vet").getValue().toString());
                         dateOfBirth.setText(ds.child("dateOfBirth").getValue().toString());
-
+                        keyId = ds.getKey();
+                        share = ds.child("share").getValue().toString();
 
                         storageReference = FirebaseStorage.getInstance().getReference().child(UPLOADS + imageName);
                         try {
@@ -140,6 +149,38 @@ public class DogProfile extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(),EditDogInfo.class);
                 startActivity(intent);
+            }
+        });
+
+        shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder shareDialog = new AlertDialog.Builder(getActivity());
+                shareDialog.setTitle("Enter email to share dog");
+
+                final EditText emailShare = new EditText(getActivity());
+                emailShare.setInputType(InputType.TYPE_CLASS_TEXT);
+                shareDialog.setView(emailShare);
+
+                shareDialog.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        myText = emailShare.getText().toString();
+                        if(share.equals(""))
+                            dogRef.child(keyId).child("share").setValue(myText);
+                        else
+                            dogRef.child(keyId).child("share").setValue(share + "," + myText);
+                        Toast.makeText(getActivity(),dogName.getText() + " has been shared with " + myText, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                shareDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                shareDialog.show();
             }
         });
 

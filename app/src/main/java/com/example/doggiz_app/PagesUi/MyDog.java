@@ -94,7 +94,7 @@ public class MyDog extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     for (DataSnapshot ds2 : snapshot.getChildren()) {
-                                        if (ds2.child("userEmail").getValue().equals(email)) {
+                                        if (ds2.child("userEmail").getValue().equals(email) || ds2.child("share").getValue().toString().contains(email)) {
 
                                             counter++;
                                             linearLayout = findViewById(R.id.myDogsLayout);
@@ -108,7 +108,7 @@ public class MyDog extends AppCompatActivity {
                                             dogName = view.findViewById(R.id.dogName);
                                             dogName.setText(ds2.child("dogName").getValue().toString());
                                             owenerName = view.findViewById(R.id.ownerName);
-                                            owenerName.setText(owner);
+                                            owenerName.setText(ds2.child("userEmail").getValue().toString());
                                             views[index] = view;
                                             counters[index].setDogName(dogName.getText().toString());
                                             counters[index].setFoodCounter(Integer.valueOf(ds2.child("food").getValue().toString()));
@@ -198,7 +198,7 @@ public class MyDog extends AppCompatActivity {
                                     public void onDataChange(DataSnapshot snapshot) {
                                         index = 0;
                                         for (DataSnapshot ds2 : snapshot.getChildren()) {
-                                            if (ds2.child("userEmail").getValue().equals(email)) {
+                                            if (ds2.child("userEmail").getValue().equals(email) || ds2.child("share").getValue().toString().contains(email)) {
 
                                                 imgDog[index] = views[index].findViewById(R.id.dogImg);
                                                 imgDeleteDog[index] = views[index].findViewById(R.id.deleteImage);
