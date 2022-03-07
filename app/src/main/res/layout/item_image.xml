@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="230dp"
         android:layout_centerInParent="true">
 
         <androidx.cardview.widget.CardView
@@ -39,17 +39,61 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/ownerName"
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:text="Ower's Name"
-                    android:textColor="#4E4D4D"
-                    android:textSize="13sp"
-                    android:textStyle="normal" />
+                    android:orientation="horizontal">
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="right">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginRight="30dp"
+                            android:background="@drawable/walk" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/ownerName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="center"
+                            android:text="Ower's Name"
+                            android:textColor="#4E4D4D"
+                            android:textSize="13sp"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="left">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="30dp"
+                            android:background="@drawable/dogbowl" />
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -61,57 +105,83 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:weightSum="3">
+                    android:weightSum="2">
 
-                    <TextView
-                        android:id="@+id/breedTextView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="40dp"
                         android:gravity="center"
-                        android:padding="5dp"
-                        android:text="Breed"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal">
 
+                        <Button
+                            android:id="@+id/walkMinus"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/roundedbutton2"
+                            android:text="-"
+                            android:textStyle="bold"
+                            app:backgroundTint="@null" />
+                        />
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:id="@+id/walkCounter"
+                            android:gravity="center"
+                            android:text="0" />
+
+                        <Button
+                            android:id="@+id/walkPluse"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/roundedbutton2"
+                            android:text="+"
+                            app:backgroundTint="@null" />
+                    </LinearLayout>
 
                     <View
                         android:layout_width="2dp"
                         android:layout_height="match_parent"
                         android:background="#79D6D1D1" />
 
-                    <TextView
-                        android:id="@+id/vetTextView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:padding="5dp"
-                        android:text="Vet's Name"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <View
-                        android:layout_width="2dp"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:background="#79D6D1D1" />
-
-                    <TextView
-                        android:id="@+id/dateTextView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
                         android:gravity="center"
-                        android:padding="5dp"
-                        android:text="Date Of Birth"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:layout_marginLeft="20dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/foodMinus"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="10dp"
+                            android:background="@drawable/roundedbutton2"
+                            android:gravity="left"
+                            android:text="-"
+                            android:textStyle="bold"
+                            app:backgroundTint="@null" />
+
+                        <TextView
+                            android:id="@+id/foodCount"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:gravity="center"
+                            android:text="0" />
+
+                        <Button
+                            android:id="@+id/foodPluse"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/roundedbutton2"
+                            android:gravity="right"
+                            android:text="+"
+                            app:backgroundTint="@null" />/>
+
+
+                    </LinearLayout>
 
 
                 </LinearLayout>
@@ -136,8 +206,7 @@
         android:id="@+id/deleteImage"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_toEndOf="@+id/dogImg"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="90dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="65dp"
         android:background="@drawable/delete" />
 </RelativeLayout>

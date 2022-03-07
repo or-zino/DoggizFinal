@@ -135,7 +135,7 @@ public class AddingDog extends AppCompatActivity {
                 }
 
 
-                Dog dog = new Dog(dogName, breed, vet, dogDate, LogIn.email);
+                Dog dog = new Dog(dogName, breed, vet, dogDate,5,5, LogIn.email);
                 if(photoDogName == null)
                     photoDogName = "empty.jpg";
                 dog.setImageName(photoDogName);
