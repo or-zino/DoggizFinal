@@ -101,18 +101,18 @@ public class MyDog extends AppCompatActivity {
                                             view = getLayoutInflater().inflate(R.layout.item_image, null);
                                             counters[index] =  new Counters();
                                             foodCounter[index] = view.findViewById(R.id.foodCount);
-                                            foodCounter[index].setText(ds2.child("food").getValue().toString());
+                                            foodCounter[index].setText(ds2.child("currentFood").getValue().toString());
                                             walkCounter[index] = view.findViewById(R.id.walkCounter);
-                                            walkCounter[index].setText(ds2.child("walk").getValue().toString());
+                                            walkCounter[index].setText(ds2.child("currentWalk").getValue().toString());
 
                                             dogName = view.findViewById(R.id.dogName);
                                             dogName.setText(ds2.child("dogName").getValue().toString());
                                             owenerName = view.findViewById(R.id.ownerName);
-                                            owenerName.setText(ds2.child("userEmail").getValue().toString());
+                                            owenerName.setText(ds2.child("ownerName").getValue().toString());
                                             views[index] = view;
                                             counters[index].setDogName(dogName.getText().toString());
-                                            counters[index].setFoodCounter(Integer.valueOf(ds2.child("food").getValue().toString()));
-                                            counters[index].setWalkCounter(Integer.valueOf(ds2.child("walk").getValue().toString()));
+                                            counters[index].setFoodCounter(Integer.valueOf(ds2.child("currentFood").getValue().toString()));
+                                            counters[index].setWalkCounter(Integer.valueOf(ds2.child("currentWalk").getValue().toString()));
 
                                             counters[index].setFoodM(views[index].findViewById(R.id.foodMinus));
                                             counters[index].getFoodM().setOnClickListener(new View.OnClickListener() {
@@ -125,7 +125,7 @@ public class MyDog extends AppCompatActivity {
                                                                     counters[i].setFoodCounter(counters[i].getFoodCounter() - 1);
                                                                     int foodNumber = counters[i].getFoodCounter();
                                                                     foodCounter[i].setText(String.valueOf(foodNumber));
-                                                                    dogRef.child(ds2.getKey()).child("food").setValue(foodNumber);
+                                                                    dogRef.child(ds2.getKey()).child("currentFood").setValue(foodNumber);
                                                                 }
                                                             }
                                                         }
@@ -140,10 +140,12 @@ public class MyDog extends AppCompatActivity {
                                                     for(int i = 0; i< counters.length;i++) {
                                                         if(counters[i] != null){
                                                             if (counters[i].getFoodP().equals(v)) {
-                                                                counters[i].setFoodCounter(counters[i].getFoodCounter() + 1);
-                                                                int foodNumber = counters[i].getFoodCounter();
-                                                                foodCounter[i].setText(String.valueOf(foodNumber));
-                                                                dogRef.child(ds2.getKey()).child("food").setValue(foodNumber);
+                                                                if(counters[i].getFoodCounter() < Integer.valueOf(ds2.child("maxFood").getValue().toString())) {
+                                                                    counters[i].setFoodCounter(counters[i].getFoodCounter() + 1);
+                                                                    int foodNumber = counters[i].getFoodCounter();
+                                                                    foodCounter[i].setText(String.valueOf(foodNumber));
+                                                                    dogRef.child(ds2.getKey()).child("currentFood").setValue(foodNumber);
+                                                                }
                                                             }
                                                         }
                                                     }
@@ -161,7 +163,7 @@ public class MyDog extends AppCompatActivity {
                                                                     counters[i].setWalkCounter(counters[i].getWalkCounter() - 1);
                                                                     int walkNumber = counters[i].getWalkCounter();
                                                                     walkCounter[i].setText(String.valueOf(walkNumber));
-                                                                    dogRef.child(ds2.getKey()).child("walk").setValue(walkNumber);
+                                                                    dogRef.child(ds2.getKey()).child("currentWalk").setValue(walkNumber);
                                                                 }
                                                             }
                                                         }
@@ -176,10 +178,12 @@ public class MyDog extends AppCompatActivity {
                                                     for(int i = 0; i< counters.length;i++) {
                                                         if(counters[i] != null){
                                                             if (counters[i].getWalkP().equals(v)) {
-                                                                counters[i].setWalkCounter(counters[i].getWalkCounter() + 1);
-                                                                int walkNumber = counters[i].getWalkCounter();
-                                                                walkCounter[i].setText(String.valueOf(walkNumber));
-                                                                dogRef.child(ds2.getKey()).child("walk").setValue(walkNumber);
+                                                                if(counters[i].getWalkCounter() < Integer.valueOf(ds2.child("maxWalk").getValue().toString())) {
+                                                                    counters[i].setWalkCounter(counters[i].getWalkCounter() + 1);
+                                                                    int walkNumber = counters[i].getWalkCounter();
+                                                                    walkCounter[i].setText(String.valueOf(walkNumber));
+                                                                    dogRef.child(ds2.getKey()).child("currentWalk").setValue(walkNumber);
+                                                                }
                                                             }
                                                         }
                                                     }

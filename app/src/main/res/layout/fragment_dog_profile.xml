@@ -11,7 +11,7 @@
     <FrameLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="160dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/bluebackground"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -53,8 +53,8 @@
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/dogProfileImage"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:layout_marginTop="110dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,10 +66,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
 
+        android:id="@+id/lightblueInfoDog"
         android:layout_width="374dp"
-        android:layout_height="420dp"
+        android:layout_height="450dp"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,7 +95,8 @@
             android:textColor="#595858"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
+
 
         <TextView
             android:id="@+id/dogProfileEmptyText2"
@@ -117,7 +119,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dogProfileEmptyText2">
+            app:layout_constraintTop_toBottomOf="@+id/dogProfileEmptyText">
 
             <ImageView
                 android:id="@+id/emailImageview"
@@ -231,39 +233,231 @@
                 android:text="Date Of Birth" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/dogProfileEditBtn"
-            android:layout_width="238dp"
-            android:layout_height="44dp"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="35dp"
-            app:backgroundTint="@null"
-            android:background="@drawable/roundedbutton2"
-            android:textColor="#DFDFDF"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:text="Edit"
-
+        <LinearLayout
+            android:id="@+id/foodLinear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/instegramLinear" />
+            app:layout_constraintTop_toBottomOf="@+id/instegramLinear">
 
-        <Button
-            android:id="@+id/dogProfileShareBtn"
-            android:layout_width="238dp"
-            android:layout_height="44dp"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="5dp"
-            app:backgroundTint="@null"
-            android:background="@drawable/roundedbutton2"
-            android:textColor="#DFDFDF"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:text="Share"
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/meat" />
 
+            <TextView
+                android:id="@+id/feedNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:text="5" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:text="Of" />
+            <TextView
+                android:id="@+id/feedOverNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:text="5" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/walkLinear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dogProfileEditBtn" />
+            app:layout_constraintTop_toBottomOf="@+id/foodLinear">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/paws" />
+
+            <TextView
+                android:id="@+id/walkNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:text="5" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:text="Of" />
+            <TextView
+                android:id="@+id/walkOverNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:text="5" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttonsLinear"
+            android:layout_width="match_parent"
+            android:layout_marginTop="30dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/walkLinear">
+
+            <Button
+                android:id="@+id/dogProfileShareBtn"
+                android:layout_width="100dp"
+                android:layout_height="35dp"
+                app:backgroundTint="@null"
+                android:background="@drawable/custom_button"
+                android:textColor="#DFDFDF"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:text="Share"
+                android:textSize="12dp" />
+
+
+            <Button
+                android:id="@+id/dogProfileEditBtn"
+                android:layout_width="100dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="20dp"
+                app:backgroundTint="@null"
+                android:background="@drawable/custom_button"
+                android:textColor="#DFDFDF"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:text="Edit"
+                android:textSize="12dp" />
+
+
+        </LinearLayout>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/feedsAndWalksImages"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/lightblueInfoDog">-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/imageFeeds"-->
+<!--            android:layout_width="80dp"-->
+<!--            android:layout_height="80dp"-->
+<!--            android:background="@drawable/meat" />-->
+<!--        <ImageView-->
+<!--            android:id="@+id/imageWalks"-->
+<!--            android:layout_width="70dp"-->
+<!--            android:layout_height="70dp"-->
+<!--            android:layout_marginStart="100dp"-->
+<!--            android:background="@drawable/paws" />-->
+
+
+<!--    </LinearLayout>-->
+
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/feedsAndWalksNumber"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center|top"-->
+
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/feedsAndWalksInfo">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/feedNumber"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="15sp"-->
+<!--            android:layout_marginLeft="5dp"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:text="5" />-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="15sp"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:text="  From  " />-->
+<!--        <TextView-->
+<!--            android:id="@+id/feedOverNumber"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="15sp"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:text="5" />-->
+
+
+<!--        <TextView-->
+<!--            android:id="@+id/walkNumber"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textStyle="bold"-->
+<!--            android:layout_marginLeft="110dp"-->
+<!--            android:textSize="15sp"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:text="5" />-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="15sp"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:text="  From  " />-->
+<!--        <TextView-->
+<!--            android:id="@+id/walkOverNumber"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="15sp"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:text="5" />-->
+
+
+<!--    </LinearLayout>-->
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -12,7 +12,7 @@
     <FrameLayout
         android:id="@+id/constraint1"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/bluebackground"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -38,9 +38,9 @@
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/dogImageView"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="110dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/constraint1"
@@ -52,9 +52,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/containerDog"
         android:layout_width="390dp"
-        android:layout_height="460dp"
+        android:layout_height="500dp"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="0.1dp"
         android:layout_marginEnd="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -201,12 +201,82 @@
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/numOfWalksInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/breedLinear">
+
+            <ImageView
+                android:id="@+id/pawsImage"
+                android:layout_width="35dp"
+                android:layout_height="38dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/paws" />
+
+            <EditText
+                android:id="@+id/walksInput"
+                android:inputType="number"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:hint="Number of daily walks" />
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/numOfFeedsInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/numOfWalksInput">
+
+            <ImageView
+                android:id="@+id/feedsImage"
+                android:layout_width="35dp"
+                android:layout_height="38dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/meat" />
+
+            <EditText
+                android:id="@+id/feedsInput"
+                android:inputType="number"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:hint="Number of daily feeds" />
+
+
+
+        </LinearLayout>
+
+
 
         <Button
             android:id="@+id/addDogBtn"
             android:layout_width="181dp"
-            android:layout_height="44dp"
-            android:layout_marginTop="48dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="96dp"
             app:backgroundTint="@null"
             android:background="@drawable/roundedbutton2"
@@ -214,19 +284,8 @@
             android:textStyle="bold"
             android:text="Add Dog"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/breedLinear" />
+            app:layout_constraintTop_toBottomOf="@+id/numOfFeedsInput" />
 
-        <ProgressBar
-            android:id="@+id/addDogProgressBar"
-            style="@android:style/Widget.DeviceDefault.Light.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addDogBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

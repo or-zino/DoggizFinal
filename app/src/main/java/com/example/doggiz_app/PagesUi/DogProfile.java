@@ -49,6 +49,7 @@ public class DogProfile extends Fragment {
     private LinearLayout linearLayout;
     private View view;
     private TextView dogName, owenerName, breed, vetName, dateOfBirth;
+    private TextView feedsInfoOver, feedsInfo, walksInfoOver, walksInfo;
     private View[] views = new View[4];
     private FirebaseDatabase database;
     private DatabaseReference dogRef, userRef;
@@ -77,16 +78,19 @@ public class DogProfile extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_dog_profile, container, false);
 
-        dogName     = v.findViewById(R.id.dogProfileName);
-        owenerName  = v.findViewById(R.id.dogProfileOwnerTextview);
-        breed       = v.findViewById(R.id.dogProfileBreedTextview);
-        vetName     = v.findViewById(R.id.dogProfileVetTextview);
-        dateOfBirth = v.findViewById(R.id.dogProfileDateTextview);
-        imDog       = v.findViewById(R.id.dogProfileImage);
-        imMyPro     = v.findViewById(R.id.myProfile);
-        editBtn     = v.findViewById(R.id.dogProfileEditBtn);
-        shareBtn    = v.findViewById(R.id.dogProfileShareBtn);
-
+        dogName         = v.findViewById(R.id.dogProfileName);
+        owenerName      = v.findViewById(R.id.dogProfileOwnerTextview);
+        breed           = v.findViewById(R.id.dogProfileBreedTextview);
+        vetName         = v.findViewById(R.id.dogProfileVetTextview);
+        dateOfBirth     = v.findViewById(R.id.dogProfileDateTextview);
+        imDog           = v.findViewById(R.id.dogProfileImage);
+        imMyPro         = v.findViewById(R.id.myProfile);
+        editBtn         = v.findViewById(R.id.dogProfileEditBtn);
+        shareBtn        = v.findViewById(R.id.dogProfileShareBtn);
+        feedsInfo       = v.findViewById(R.id.feedNumber); //now how much he eat
+        feedsInfoOver   = v.findViewById(R.id.feedOverNumber); //max of food
+        walksInfo       = v.findViewById(R.id.walkNumber); //now how much he eat
+        walksInfoOver   = v.findViewById(R.id.walkOverNumber); //max of walks
 
         imMyPro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +121,10 @@ public class DogProfile extends Fragment {
                         breed.setText(ds.child("breed").getValue().toString());
                         vetName.setText(ds.child("vet").getValue().toString());
                         dateOfBirth.setText(ds.child("dateOfBirth").getValue().toString());
+                        feedsInfo.setText(ds.child("currentFood").getValue().toString());
+                        feedsInfoOver.setText(ds.child("maxFood").getValue().toString());
+                        walksInfo.setText(ds.child("currentWalk").getValue().toString());
+                        walksInfoOver.setText(ds.child("maxWalk").getValue().toString());
                         keyId = ds.getKey();
                         share = ds.child("share").getValue().toString();
 

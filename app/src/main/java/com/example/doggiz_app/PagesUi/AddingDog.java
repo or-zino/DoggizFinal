@@ -4,12 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -27,6 +32,7 @@ import android.widget.Toast;
 
 import com.example.doggiz_app.Models.DBdog;
 import com.example.doggiz_app.Models.Dog;
+import com.example.doggiz_app.Models.FoodAndWalks;
 import com.example.doggiz_app.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -46,11 +52,10 @@ public class AddingDog extends AppCompatActivity {
     String[] breeds = {"Akita", "Alaskan Malamute", "American Stafford","shire terrier","American water spaniel","Australian cattle","Australian shepherd","Australian terrier","basenji","bassethound","beagle","bearded collie","Bedlington terrier","Bernesemountain","bichon frise","bloodhound,border collie","border terrier","borzoi","Boston terrier","bouvier desFlandres","boxer","briard","Brittany","Brussels griffon","bull terrier","bulldog","bullmastiff","cairn terrier","Canaan dog","Chesapeake Bay retriever","Chihuahua","Chinese crested","Chinese shar-pei","chow chow","Clumber spaniel","cocker spaniel","collie","curly-coated retriever","dachshund","Dalmatian","Dobermanpinscher","English cocker spaniel","Englishsetter","English springer spaniel","English toy spaniel","Eskimo dog","Finnishspitz","flat-coated retriever","fox terrier","foxhound","French bulldog","Germanshepherd","German shorthaired pointer","German wirehaired pointer","golden retriever","Gordon setter","Great Dane","greyhound","Irish setter","Irish waterspaniel","Irish wolfhound","Jack Russell terrier","Japanese spaniel","keeshond","Kerryblueterrier","komondor","kuvasz","Labrador retriever","Lakelandterrier","Lhasa apso","Maltese","Manchester terrier","mastiff","Mexicanhairless","Newfoundland","Norwegian elkhound","Norwich terrier","otterhound","papillon","Pekingese","pointer","Pomeranian","poodle","pug","puli","Rhodesinridgeback","Rottweiler","Saint Bernard","saluki","Samoyed","schipperke","schnauzer","Scottishdeerhound","Scottish terrier","Sealyham terrier","Shetland sheepdog","shih tzu","Siberian husky","silky terrier","Skyeterrier","Staffordshire bull terrier","soft-coated wheaten terrier","Sussexspaniel","spitz","Tibetan terrier","vizsla","Weimaraner","Welsh terrier","WestHighland white terrier" ,"whippet","Yorkshire terrier"};
     ArrayAdapter<String> adapterItems;
     private AutoCompleteTextView etBreed;
-    private EditText etDogName, etVet, etDogDate;
+    private EditText etDogName, etVet, etDogDate, eWalks, eFeeds;
     private Button addDogBtn;
     private FirebaseAuth fAuth;
     private ImageView ivDog, dateImage;
-    private ProgressBar progressBar;
     private DatePickerDialog.OnDateSetListener onDateSetListener;
 
     private  static final int PICK_IMAGE = 1;
@@ -74,9 +79,10 @@ public class AddingDog extends AppCompatActivity {
         etDogDate   = findViewById(R.id.dogDateText);
         etBreed     = findViewById(R.id.auto_complete_txt);
         addDogBtn   = findViewById(R.id.addDogBtn);
-        progressBar = findViewById(R.id.addDogProgressBar);
         ivDog       = findViewById(R.id.dogImageView);
         dateImage   = findViewById(R.id.addDateDog);
+        eWalks      = findViewById(R.id.walksInput);
+        eFeeds      = findViewById(R.id.feedsInput);
 
         fAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference("dogs");
@@ -121,21 +127,20 @@ public class AddingDog extends AppCompatActivity {
         addDogBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
                 String dogName = etDogName.getText().toString().trim();
                 String breed = etBreed.getText().toString().trim();
                 String vet = etVet.getText().toString().trim();
                 String dogDate = etDogDate.getText().toString().trim();
+                FoodAndWalks foodAndWalks = new FoodAndWalks(Integer.valueOf(eFeeds.getText().toString()),0,Integer.valueOf(eFeeds.getText().toString()),0);
 
                 if(TextUtils.isEmpty(dogName)){
                     etDogName.setError("Please insert your name");
                     etDogName.requestFocus();
-                    progressBar.setVisibility(View.GONE);
                     return;
                 }
 
 
-                Dog dog = new Dog(dogName, breed, vet, dogDate,5,5, LogIn.email);
+                Dog dog = new Dog(dogName, breed, vet, dogDate, foodAndWalks, LogIn.email, PersonProfile.personName);
                 if(photoDogName == null)
                     photoDogName = "empty.jpg";
                 dog.setImageName(photoDogName);
@@ -144,7 +149,6 @@ public class AddingDog extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void unused) {
                         Toast.makeText(AddingDog.this, "Record is insert",Toast.LENGTH_SHORT).show();
-                        progressBar.setVisibility(View.GONE);
                         uploadFile();
                         startActivity(new Intent(AddingDog.this,PersonProfile.class));
                     }
@@ -152,7 +156,6 @@ public class AddingDog extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(AddingDog.this, "1Error! "+e.getMessage(),Toast.LENGTH_SHORT).show();
-                        progressBar.setVisibility(View.GONE);
                     }
                 });
 

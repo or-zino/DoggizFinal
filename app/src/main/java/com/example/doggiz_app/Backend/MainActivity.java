@@ -8,11 +8,14 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import android.app.PendingIntent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
 
+import com.example.doggiz_app.PagesUi.AddingDog;
 import com.example.doggiz_app.R;
 import com.example.doggiz_app.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

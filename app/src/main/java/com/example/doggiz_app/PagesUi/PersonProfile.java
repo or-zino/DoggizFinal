@@ -52,7 +52,7 @@ public class PersonProfile extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference userRef, dogRef;
     private static final String DOG = "Dog";
-    int counter;
+    public static String personName = "";
 
 
 
@@ -121,6 +121,7 @@ public class PersonProfile extends AppCompatActivity {
                 for(DataSnapshot ds : snapshot.getChildren()){
                     if(ds.child("email").getValue().equals(email)) {
                         tvName.setText(ds.child("fullName").getValue(String.class));
+                        personName = tvName.getText().toString();
                         tvEmail.setText(ds.child("email").getValue(String.class));
                         tvPhone.setText(ds.child("phone").getValue(String.class));
                         tvWork.setText(ds.child("workingPlace").getValue(String.class));
