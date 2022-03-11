@@ -53,7 +53,7 @@ public class EditDogInfo extends AppCompatActivity {
     private static final String EVENT = "DateEvent";
 
     private ImageView imDog, dateImage;
-    private TextView dogName, breed, vetName, dateOfBirth;
+    private TextView dogName, breed, vetName, dateOfBirth, foods, walks;
     private FirebaseDatabase database;
     private DatabaseReference dogRef, editDog, medicalRef, eventRef;
     private StorageReference storageReference;
@@ -92,10 +92,11 @@ public class EditDogInfo extends AppCompatActivity {
         imDog       = findViewById(R.id.editDogImageView);
         saveBtn     = findViewById(R.id.editDogBtn);
         dateImage   = findViewById(R.id.editDateDog);
+        foods       = findViewById(R.id.feedsInputEdit);
+        walks       = findViewById(R.id.walksInputEdit);
 
 
-
-        dogRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                dogRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
@@ -105,6 +106,8 @@ public class EditDogInfo extends AppCompatActivity {
                             breed.setText(ds.child("breed").getValue().toString());
                             vetName.setText(ds.child("vet").getValue().toString());
                             dateOfBirth.setText(ds.child("dateOfBirth").getValue().toString());
+                            foods.setText(ds.child("maxFood").getValue().toString());
+                            walks.setText(ds.child("maxWalk").getValue().toString());
                             dogId = ds.getKey();
 
                             storageReference = FirebaseStorage.getInstance().getReference().child(UPLOADS + imageName);
@@ -169,11 +172,15 @@ public class EditDogInfo extends AppCompatActivity {
                 String newBreed         = breed.getText().toString();
                 String newVet           = vetName.getText().toString();
                 String newDateOfBirth   = dateOfBirth.getText().toString();
+                String newFood          = foods.getText().toString();
+                String newWalk          = walks.getText().toString();
 
                 editDog.child(DOG).child(dogId).child("dogName").setValue(newName);
                 editDog.child(DOG).child(dogId).child("dateOfBirth").setValue(newDateOfBirth);
                 editDog.child(DOG).child(dogId).child("breed").setValue(newBreed);
                 editDog.child(DOG).child(dogId).child("vet").setValue(newVet);
+                editDog.child(DOG).child(dogId).child("maxFood").setValue(newFood);
+                editDog.child(DOG).child(dogId).child("maxWalk").setValue(newWalk);
                 if(photoDogName != null) {
                     flag = false;
                     storageReference = FirebaseStorage.getInstance().getReference("dogs");

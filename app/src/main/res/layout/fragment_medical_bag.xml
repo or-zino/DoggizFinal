@@ -39,7 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Medical Bag"
+                    android:text="Medical File"
                     android:textColor="#E1DDDD"
                     android:textSize="30sp"
                     android:textStyle="bold" />
