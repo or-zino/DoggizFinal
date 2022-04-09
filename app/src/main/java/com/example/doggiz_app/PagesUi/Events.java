@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.doggiz_app.Backend.MainActivity;
+import com.example.doggiz_app.Models.PreviousDay;
 import com.example.doggiz_app.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -27,20 +28,28 @@ import com.google.firebase.storage.StorageReference;
 
 import org.naishadhparmar.zcustomcalendar.CustomCalendar;
 import org.naishadhparmar.zcustomcalendar.OnDateSelectedListener;
+import org.naishadhparmar.zcustomcalendar.OnNavigationButtonClickedListener;
 import org.naishadhparmar.zcustomcalendar.Property;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
 
 
-public class Events extends Fragment {
+public class Events extends Fragment  implements OnNavigationButtonClickedListener {
 
-    public int preDay = 0, currentDay, dayWithEvent;
+    public int preDay = 0, currentDay, dayWithEvent, currentMonth;
     private static final String EVENT= "DateEvent";
+    public static DatabaseReference eventRef;
     private View eventCard;
+    public String email = LogIn.email;
     public LinearLayout eventsLinear;
+    public HashMap<Integer,Object> dateHashMap;
     TextView title, description, dogName;
     ImageView deleteImage;
+    CustomCalendar customCalendar;
+    Calendar calendar;
+    public PreviousDay previousDay = new PreviousDay("",0,0);
 
     public Events() {
     }
@@ -64,15 +73,14 @@ public class Events extends Fragment {
         View v = inflater.inflate(R.layout.fragment_events, container, false);
 
 
-        CustomCalendar customCalendar;
         TextView dateTitle, eventDes;
         FloatingActionButton addBtn;
 
 
         FirebaseDatabase database;
-        DatabaseReference eventRef;
+
         StorageReference storageReference;
-        String email = LogIn.email;
+
 
         database = FirebaseDatabase.getInstance();
         eventRef = database.getReference(EVENT);
@@ -111,8 +119,8 @@ public class Events extends Fragment {
 
         customCalendar.setMapDescToProp(descHashMap);
 
-        HashMap<Integer,Object> dateHashMap = new HashMap<>();
-        Calendar calendar = Calendar.getInstance();
+        dateHashMap = new HashMap<>();
+        calendar = Calendar.getInstance();
 
 
 
@@ -120,6 +128,10 @@ public class Events extends Fragment {
 
         dateHashMap.put(calendar.get(Calendar.DAY_OF_MONTH),"current");
         currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+        currentMonth = calendar.get(Calendar.MONTH) + 1;
+
+        customCalendar.setOnNavigationButtonClickedListener(CustomCalendar.PREVIOUS, this);
+        customCalendar.setOnNavigationButtonClickedListener(CustomCalendar.NEXT, this);
 
         eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -128,13 +140,17 @@ public class Events extends Fragment {
                 for(DataSnapshot ds : snapshot.getChildren()){
                     if(ds.child("ownerEmail").getValue().equals(email)) {
                         if (ds.child("dogName").getValue().equals(MyDog.dogInUse)) {
-                            dayWithEvent = Integer.parseInt(ds.child("day").getValue().toString());
-                            dateHashMap.put(dayWithEvent, "absent");
-                            customCalendar.setDate(calendar,dateHashMap);
+                            String x = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+                            String y = ds.child("month").getValue().toString();
+                            if(x.equals(y)){
+                                dayWithEvent = Integer.parseInt(ds.child("day").getValue().toString());
+                                dateHashMap.put(dayWithEvent, "absent");
+                            }
+
                         }
                     }
                 }
-
+                customCalendar.setDate(calendar,dateHashMap);
 
 
 
@@ -147,33 +163,39 @@ public class Events extends Fragment {
         });
 
 
+
+
         customCalendar.setDate(calendar,dateHashMap);
 
         customCalendar.setOnDateSelectedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(View view, Calendar selectedDate, Object desc) {
-
+                dateHashMap.clear();
                 eventsLinear = v.findViewById(R.id.LinearEventDesc);
                 eventsLinear.removeAllViews();
                 eventsLinear.setVisibility(View.VISIBLE);
+                   if((selectedDate.get(Calendar.MONTH) + 1) == currentMonth)
+                       dateHashMap.put(currentDay, "current");
+                    customCalendar.setDate(calendar,dateHashMap);
 
-                if(currentDay == preDay)
-                    dateHashMap.put(currentDay, "current");
-                else {
                     eventRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             for (DataSnapshot ds : snapshot.getChildren()) {
                                 if (ds.child("ownerEmail").getValue().equals(email)) {
                                     if (ds.child("dogName").getValue().equals(MyDog.dogInUse)) {
-                                        if(ds.child("day").getValue().equals(String.valueOf(selectedDate.get(Calendar.DAY_OF_MONTH)))) {
-                                            if(ds.child("day").getValue().equals(String.valueOf(selectedDate.get(Calendar.DAY_OF_MONTH))))
-                                            dayWithEvent = Integer.parseInt(ds.child("day").getValue().toString());
+                                        if(ds.child("month").getValue().equals(String.valueOf(selectedDate.get(Calendar.MONTH)+1))) {
+                                                dayWithEvent = Integer.parseInt(ds.child("day").getValue().toString());
+                                                if(dayWithEvent != selectedDate.get(Calendar.DAY_OF_MONTH))
+                                                    dateHashMap.put(dayWithEvent, "absent");
+
+
                                         }
 
                                     }
                                 }
                             }
+                            customCalendar.setDate(calendar, dateHashMap);
                         }
 
                         @Override
@@ -182,23 +204,18 @@ public class Events extends Fragment {
                         }
                     });
 
-                    if (preDay == dayWithEvent) {
-                        dateHashMap.put(dayWithEvent, "absent");
-                    }else
-                        dateHashMap.put(preDay, "default");
-                }
                 String sDate = selectedDate.get(Calendar.DAY_OF_MONTH) + "/" + (selectedDate.get(Calendar.MONTH) + 1) + "/" + selectedDate.get(Calendar.YEAR);
                 dateTitle.setVisibility(View.VISIBLE);
                 dateTitle.setText(sDate);
                 dateHashMap.put(selectedDate.get(Calendar.DAY_OF_MONTH),"present");
-                if(preDay == selectedDate.get(Calendar.DAY_OF_MONTH)){
-                    dateHashMap.put(preDay,"default");
-                    eventsLinear.setVisibility(View.GONE);
-                    dateTitle.setVisibility(View.GONE);
-                    dateHashMap.put(currentDay,"current");
-                }
+//                if(preDay == selectedDate.get(Calendar.DAY_OF_MONTH)){
+//                    dateHashMap.put(preDay,"default");
+//                    eventsLinear.setVisibility(View.GONE);
+//                    dateTitle.setVisibility(View.GONE);
+//                    dateHashMap.put(currentDay,"current");
+//                }
                 customCalendar.setDate(calendar,dateHashMap);
-                preDay = selectedDate.get(Calendar.DAY_OF_MONTH);
+               // preDay = selectedDate.get(Calendar.DAY_OF_MONTH);
 
 
 
@@ -212,8 +229,8 @@ public class Events extends Fragment {
                             if(ds.child("ownerEmail").getValue().equals(email)) {
                                 if(ds.child("dogName").getValue().equals(MyDog.dogInUse)){
                                     if(ds.child("year").getValue().equals(String.valueOf(selectedDate.get(Calendar.YEAR))) &&
-                                       ds.child("month").getValue().equals(String.valueOf(selectedDate.get(Calendar.MONTH)+ 1)) &&
-                                       ds.child("day").getValue().equals(String.valueOf(selectedDate.get(Calendar.DAY_OF_MONTH)))){
+                                            ds.child("month").getValue().equals(String.valueOf(selectedDate.get(Calendar.MONTH)+ 1)) &&
+                                            ds.child("day").getValue().equals(String.valueOf(selectedDate.get(Calendar.DAY_OF_MONTH)))){
 
                                         eventCard = getLayoutInflater().inflate(R.layout.item_add, null);
                                         eventsLinear = v.findViewById(R.id.LinearEventDesc);
@@ -273,6 +290,8 @@ public class Events extends Fragment {
             }
         });
 
+
+
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -282,7 +301,58 @@ public class Events extends Fragment {
         });
 
 
-
         return v;
+    }
+
+    @Override
+    public Map<Integer, Object>[] onNavigationButtonClicked(int whichButton, Calendar newMonth) {
+        Map<Integer, Object>[] arr = new Map[2];
+        dateHashMap.clear();
+       // switch(newMonth.get(Calendar.MONTH)) {
+        if((newMonth.get(Calendar.MONTH) + 1) == currentMonth)
+            dateHashMap.put(currentDay,"current");
+        arr[0] = new HashMap<>();
+        //arr[0].put(3, "absent");
+
+        eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for(DataSnapshot ds : snapshot.getChildren()){
+                    if(ds.child("ownerEmail").getValue().equals(email)) {
+                        if (ds.child("dogName").getValue().equals(MyDog.dogInUse)) {
+                            if(Integer.parseInt(ds.child("month").getValue().toString()) == (newMonth.get(Calendar.MONTH) + 1)){
+                                dayWithEvent = Integer.parseInt(ds.child("day").getValue().toString());
+                                dateHashMap.put(dayWithEvent, "absent");
+                                customCalendar.setDate(calendar, dateHashMap);
+                            }
+                        }
+                    }
+                }
+
+
+
+                customCalendar.setDate(newMonth,dateHashMap);
+                calendar = newMonth;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+//            case Calendar.J
+//            case Calendar.AUGUST:
+//                arr[0] = new HashMap<>(); //This is the map linking a date to its description
+//                arr[0].put(3, "absent");
+//                arr[1] = null; //Optional: This is the map linking a date to its tag.
+//                break;
+//            case Calendar.JUNE:
+//                arr[0] = new HashMap<>();
+//                arr[0].put(5, "absent");
+//                arr[1] = null;
+//                break;
+       // }
+        return arr;
     }
 }

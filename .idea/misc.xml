@@ -28,13 +28,16 @@
         <entry key="app/src/main/res/layout/activity_map_back_example.xml" value="0.34375" />
         <entry key="app/src/main/res/layout/activity_map_exmple.xml" value="0.37228260869565216" />
         <entry key="app/src/main/res/layout/activity_my_dog.xml" value="0.1767983789260385" />
+        <entry key="app/src/main/res/layout/activity_new_event.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_person_profile.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.30052083333333335" />
         <entry key="app/src/main/res/layout/activity_register_part2.xml" value="0.3967391304347826" />
         <entry key="app/src/main/res/layout/activity_remove_medical_bag.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/calendar_cell.xml" value="0.13627152988855115" />
         <entry key="app/src/main/res/layout/current_view.xml" value="0.32971014492753625" />
         <entry key="app/src/main/res/layout/default_view.xml" value="0.32971014492753625" />
         <entry key="app/src/main/res/layout/fragment_adding_medical_bag.xml" value="0.371875" />
+        <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_dog_profile.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_events.xml" value="0.2874873353596758" />
         <entry key="app/src/main/res/layout/fragment_map.xml" value="0.2874873353596758" />

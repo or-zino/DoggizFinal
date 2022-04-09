@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".PagesUi.Events">
 
     <LinearLayout
@@ -21,43 +22,43 @@
             android:textSize="30sp"
             android:textStyle="bold" />
 
-    <org.naishadhparmar.zcustomcalendar.CustomCalendar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical"
-        android:id="@+id/calendar" >
-
-        <TextView
-            android:id="@+id/dateText"
-            android:layout_marginTop="10dp"
-            android:layout_width="150dp"
-            android:layout_height="35dp"
-            android:text="Date Text"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="25sp"
-            android:visibility="gone"
-            />
-
-        <ScrollView
-
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+        <org.naishadhparmar.zcustomcalendar.CustomCalendar
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:id="@+id/calendar" >
 
-            <LinearLayout
-                android:id="@+id/LinearEventDesc"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
+            <TextView
+                android:id="@+id/dateText"
+                android:layout_marginTop="10dp"
+                android:layout_width="150dp"
+                android:layout_height="35dp"
+                android:text="Date Text"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:visibility="gone"
                 />
 
-        </ScrollView>
-    </org.naishadhparmar.zcustomcalendar.CustomCalendar>
+            <ScrollView
+
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/LinearEventDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    />
+
+            </ScrollView>
+        </org.naishadhparmar.zcustomcalendar.CustomCalendar>
 
     </LinearLayout>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
