@@ -79,7 +79,7 @@ public class medicalBag extends Fragment {
                 linearLayout.removeAllViews();
 
                 for(DataSnapshot ds : snapshot.getChildren()){
-                    if(ds.child("ownerEmail").getValue().equals(email)) {
+                    if(ds.child("ownerEmail").getValue().equals(email) || DogProfile.shareDog.contains(email)) {
                         if(ds.child("dogName").getValue().equals(MyDog.dogInUse)){
 
                             medicCard = getLayoutInflater().inflate(R.layout.item_info, null);

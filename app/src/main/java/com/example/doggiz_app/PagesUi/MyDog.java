@@ -58,7 +58,7 @@ public class MyDog extends AppCompatActivity {
     public String email;
     public String owner;
     public String imagesName[] = new String[9];
-    private int  index = 0, index2 = 0,index3 = 0, counter = 0;
+    private int  index = 0, index2 = 0;
     private Bitmap bitmap[] = new Bitmap[9];
     private File imgFile[] = new File[9];
 
@@ -96,7 +96,6 @@ public class MyDog extends AppCompatActivity {
                                     for (DataSnapshot ds2 : snapshot.getChildren()) {
                                         if (ds2.child("userEmail").getValue().equals(email) || ds2.child("share").getValue().toString().contains(email)) {
 
-                                            counter++;
                                             linearLayout = findViewById(R.id.myDogsLayout);
                                             view = getLayoutInflater().inflate(R.layout.item_image, null);
                                             counters[index] =  new Counters();

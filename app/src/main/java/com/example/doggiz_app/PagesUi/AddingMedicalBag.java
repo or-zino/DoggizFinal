@@ -129,21 +129,27 @@ public class AddingMedicalBag extends AppCompatActivity {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email   = LogIn.email;
-                String dogName = MyDog.dogInUse;
-                String description = date + ":" + etDes.getText().toString().trim();
+               if(!chooseTreat.equals("")) {
+                   if(!date.equals("")) {
+                       String email = LogIn.email;
+                       String dogName = MyDog.dogInUse;
+                       String description = date + "  " + etDes.getText().toString().trim();
 
-                MedicalCard medicalCard = new MedicalCard(email,dogName,description,chooseTreat);
-                dbmed.add(medicalCard).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(AddingMedicalBag.this, "Record is insert",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                       MedicalCard medicalCard = new MedicalCard(email, dogName, description, chooseTreat);
+                       dbmed.add(medicalCard).addOnSuccessListener(new OnSuccessListener<Void>() {
+                           @Override
+                           public void onSuccess(Void unused) {
+                               Toast.makeText(AddingMedicalBag.this, "Record is insert", Toast.LENGTH_SHORT).show();
+                               startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
-                    }
-                });
-
-
+                           }
+                       });
+                   } else{
+                       Toast.makeText(AddingMedicalBag.this, "Please click on the calendar and choose a date!", Toast.LENGTH_SHORT).show();
+                   }
+               } else {
+                   Toast.makeText(AddingMedicalBag.this, "Please Choose Treatment!", Toast.LENGTH_SHORT).show();
+               }
             }
         });
 

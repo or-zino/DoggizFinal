@@ -78,14 +78,21 @@ public class AddEvent extends AppCompatActivity {
                 String description = etDesc.getText().toString().trim();
                 DateEvent dateEvent = new DateEvent(String.valueOf(pYear), String.valueOf(pMonth), String.valueOf(pDay), title, description, dogName, email);
 
-                dbEvent.add(dateEvent).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(AddEvent.this, "Record is insert",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                if(!title.equals("")) {
+                    if(pYear != 0 && pMonth != 0 && pDay != 0) {
+                        dbEvent.add(dateEvent).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(AddEvent.this, "Record is insert", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            }
+                        });
+                    }else {
+                        Toast.makeText(AddEvent.this, "Please click on the calendar and choose a date!", Toast.LENGTH_SHORT).show();
                     }
-                });
-
+                } else{
+                    Toast.makeText(AddEvent.this, "Please enter a title!", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });

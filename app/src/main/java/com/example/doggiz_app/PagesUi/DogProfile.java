@@ -44,6 +44,7 @@ public class DogProfile extends Fragment {
     private static final String DOG = "Dog";
     private static final String USERS = "Users";
     private static final String UPLOADS = "dogs/";
+    public static String shareDog = "";
 
     private ImageView imAdd, imDog, imMyPro;
     private LinearLayout linearLayout;
@@ -127,6 +128,7 @@ public class DogProfile extends Fragment {
                         walksInfoOver.setText(ds.child("maxWalk").getValue().toString());
                         keyId = ds.getKey();
                         share = ds.child("share").getValue().toString();
+                        shareDog = share;
 
                         storageReference = FirebaseStorage.getInstance().getReference().child(UPLOADS + imageName);
                         try {

@@ -77,23 +77,29 @@ public class LogIn extends AppCompatActivity {
 
 
                 progressBar.setVisibility(View.VISIBLE);
-                fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(LogIn.this, "User Logged in Successfully", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(LogIn.this,PersonProfile.class));
-                            progressBar.setVisibility(View.GONE);
+                if(email.equals("admin") && password.equals("admin1234")){
+                    Toast.makeText(LogIn.this, "Welcome admin!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(LogIn.this, AdminPage.class));
+                    progressBar.setVisibility(View.GONE);
+                }
+                else {
+                    fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(LogIn.this, "User Logged in Successfully", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(LogIn.this, PersonProfile.class));
+                                progressBar.setVisibility(View.GONE);
 
-                        }else{
-                            Toast.makeText(LogIn.this, "Log in Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                            progressBar.setVisibility(View.GONE);
+                            } else {
+                                Toast.makeText(LogIn.this, "Log in Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                progressBar.setVisibility(View.GONE);
+                            }
+
                         }
-
-                    }
-                });
-                //fAuth.getCurrentUser()
-
+                    });
+                    //fAuth.getCurrentUser()
+                }
             }
         });
 

@@ -138,7 +138,7 @@ public class Events extends Fragment  implements OnNavigationButtonClickedListen
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 for(DataSnapshot ds : snapshot.getChildren()){
-                    if(ds.child("ownerEmail").getValue().equals(email)) {
+                    if(ds.child("ownerEmail").getValue().equals(email) || DogProfile.shareDog.contains(email)) {
                         if (ds.child("dogName").getValue().equals(MyDog.dogInUse)) {
                             String x = String.valueOf(calendar.get(Calendar.MONTH) + 1);
                             String y = ds.child("month").getValue().toString();
@@ -182,7 +182,7 @@ public class Events extends Fragment  implements OnNavigationButtonClickedListen
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             for (DataSnapshot ds : snapshot.getChildren()) {
-                                if (ds.child("ownerEmail").getValue().equals(email)) {
+                                if (ds.child("ownerEmail").getValue().equals(email) || DogProfile.shareDog.contains(email)) {
                                     if (ds.child("dogName").getValue().equals(MyDog.dogInUse)) {
                                         if(ds.child("month").getValue().equals(String.valueOf(selectedDate.get(Calendar.MONTH)+1))) {
                                                 dayWithEvent = Integer.parseInt(ds.child("day").getValue().toString());
@@ -217,16 +217,11 @@ public class Events extends Fragment  implements OnNavigationButtonClickedListen
                 customCalendar.setDate(calendar,dateHashMap);
                // preDay = selectedDate.get(Calendar.DAY_OF_MONTH);
 
-
-
-
-
-
                 eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for(DataSnapshot ds : snapshot.getChildren()){
-                            if(ds.child("ownerEmail").getValue().equals(email)) {
+                            if(ds.child("ownerEmail").getValue().equals(email) || DogProfile.shareDog.contains(email)) {
                                 if(ds.child("dogName").getValue().equals(MyDog.dogInUse)){
                                     if(ds.child("year").getValue().equals(String.valueOf(selectedDate.get(Calendar.YEAR))) &&
                                             ds.child("month").getValue().equals(String.valueOf(selectedDate.get(Calendar.MONTH)+ 1)) &&
@@ -319,7 +314,7 @@ public class Events extends Fragment  implements OnNavigationButtonClickedListen
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 for(DataSnapshot ds : snapshot.getChildren()){
-                    if(ds.child("ownerEmail").getValue().equals(email)) {
+                    if(ds.child("ownerEmail").getValue().equals(email) || DogProfile.shareDog.contains(email)) {
                         if (ds.child("dogName").getValue().equals(MyDog.dogInUse)) {
                             if(Integer.parseInt(ds.child("month").getValue().toString()) == (newMonth.get(Calendar.MONTH) + 1)){
                                 dayWithEvent = Integer.parseInt(ds.child("day").getValue().toString());
