@@ -19,6 +19,7 @@ import com.example.doggiz_app.PagesUi.Map;
 import com.example.doggiz_app.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -39,6 +40,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class MapBack extends AppCompatActivity {
 
@@ -65,10 +67,6 @@ public class MapBack extends AppCompatActivity {
         btFind = findViewById(R.id.bt_find);
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
 
-        String[] placeTypeList = {"veterinarians"};
-        String[] placeNameList = {"Veterinarians"};
-
-        spType.setAdapter(new ArrayAdapter<>(MapBack.this, android.R.layout.simple_spinner_dropdown_item, placeNameList));
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(MapBack.this);
         if (ActivityCompat.checkSelfPermission(MapBack.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getCurrentLocation();
@@ -76,23 +74,6 @@ public class MapBack extends AppCompatActivity {
             ActivityCompat.requestPermissions(MapBack.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
 
         }
-
-
-//        btFind.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int i = spType.getSelectedItemPosition();
-//                String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +
-//                        "?location=" + currentLat + "," + currentLong +
-//                        "&radius=3000" +
-//                        "&type=" + "veterinarians" +
-//                        "&sensor=true" +
-//                        "&key=" + getResources().getString(R.string.map_key);
-//
-//                new PlaceTask().execute(url);
-//
-//            }
-//        });
     }
 
     private void getCurrentLocation() {
@@ -107,9 +88,26 @@ public class MapBack extends AppCompatActivity {
                     supportMapFragment.getMapAsync(new OnMapReadyCallback() {
                         @Override
                         public void onMapReady(GoogleMap googleMap) {
-                            //map.clear();
                             map = googleMap;
-                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLong), 15));
+                            map.clear();
+                            LatLng latLng = new LatLng(currentLat, currentLong);
+
+                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+                            map.animateCamera(cameraUpdate);
+
+                            map.getUiSettings().setZoomControlsEnabled(true);
+                            map.getUiSettings().setCompassEnabled(true);
+                            map.getUiSettings().setZoomControlsEnabled(true);
+                            map.getUiSettings().setScrollGesturesEnabled(true);
+                            map.getUiSettings().setRotateGesturesEnabled(true);
+                            //if(ActivityCompat.checkSelfPermission(MapBack2.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                            //   return;
+                            //}
+                            if (ActivityCompat.checkSelfPermission(MapBack.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MapBack.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                return;
+                            }
+                            map.setMyLocationEnabled(true);
+                            map.getUiSettings().setMyLocationButtonEnabled(true);
 
                             String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +
                                     "?location=" + currentLat + "," + currentLong +
@@ -191,8 +189,8 @@ public class MapBack extends AppCompatActivity {
             map.clear();
             for(int i=0; i<hashMaps.size();i++){
                 HashMap<String,String> hashMapList = hashMaps.get(i);
-                double lat = Double.parseDouble(hashMapList.get("lat"));
-                double lng = Double.parseDouble(hashMapList.get("lng"));
+                double lat = Double.parseDouble(Objects.requireNonNull(hashMapList.get("lat")));
+                double lng = Double.parseDouble(Objects.requireNonNull(hashMapList.get("lng")));
                 String name = hashMapList.get("name");
                 LatLng latLng = new LatLng(lat,lng);
                 MarkerOptions options =new MarkerOptions();

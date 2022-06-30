@@ -144,8 +144,8 @@ public class EditProfile extends AppCompatActivity {
                     uploadFile();
                // }
 //                if(flag) {
-//                    Intent intent = new Intent(EditProfile.this,PersonProfile.class);
-//                    startActivity(intent);
+                    Intent intent = new Intent(EditProfile.this,PersonProfile.class);
+                    startActivity(intent);
 //                }
             }
         });
