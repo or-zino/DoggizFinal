@@ -89,7 +89,9 @@ public class RegisterPart2 extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            User user = new User(Register.userName, Register.email, phone, work, profession, address, instegram);
+                            User user = new User(Register.userName, Register.email, phone, work, profession, address, instegram,Register.password);
+                            if(Register.photoName == null)
+                                Register.photoName = "user.png";
                             user.setImageName(Register.photoName);
                             FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

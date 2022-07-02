@@ -92,7 +92,7 @@ public class LogIn extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
 
                             } else {
-                                Toast.makeText(LogIn.this, "Log in Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(LogIn.this, "Log in Error: Please try again" , Toast.LENGTH_LONG).show();
                                 progressBar.setVisibility(View.GONE);
                             }
 

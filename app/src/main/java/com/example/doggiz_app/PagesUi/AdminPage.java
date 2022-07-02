@@ -22,6 +22,9 @@ import com.example.doggiz_app.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,27 +36,31 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AdminPage extends AppCompatActivity {
 
     private static final String USERS = "Users";
+    private static final String DOG = "Dog";
     private static final String UPLOADS = "uploads/";
 
     private LinearLayout linearLayout;
     private View view;
     private TextView personName, personEmail, personWork, personAddress, personPhone;
-    private ImageView imgPerson[] = new ImageView[10];
-    private ImageView imgDeletePerson[] = new ImageView[10];
+    private ImageView imgPerson[] = new ImageView[100];
+    private ImageView imgDeletePerson[] = new ImageView[100];
     public Counters[] counters = new Counters[10];
-    private View[] views = new View[10];
-    private Bitmap bitmap[] = new Bitmap[10];
-    private File imgFile[] = new File[10];
-    public String imagesName[] = new String[10];
+    private View[] views = new View[100];
+    private Bitmap bitmap[] = new Bitmap[100];
+    private File imgFile[] = new File[100];
+    public String imagesName[] = new String[100];
     private int  index = 0, index2 = 0;
 
     private FirebaseDatabase database;
-    private DatabaseReference userRef;
+    private DatabaseReference userRef, dogRef;
     private StorageReference storageReference;
+    FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +72,8 @@ public class AdminPage extends AppCompatActivity {
 
         database    = FirebaseDatabase.getInstance();
         userRef     = database.getReference(USERS);
+        dogRef      = database.getReference(DOG);
+        fAuth       =  FirebaseAuth.getInstance();
 
         showUsers();
     }
@@ -119,10 +128,66 @@ public class AdminPage extends AppCompatActivity {
                                                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
-                                                        ds2.getRef().removeValue();
-                                                        finish();
-                                                        startActivity(new Intent(AdminPage.this, AdminPage.class));
-                                                        dialog.dismiss();
+
+                                                        String userEmail = ds2.child("email").getValue().toString();
+                                                        String userPassword = ds2.child("password").getValue().toString();
+
+                                                        fAuth.signInWithEmailAndPassword(userEmail,userPassword)
+                                                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                                                        if (task.isSuccessful()) {
+                                                                            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                                                            user.delete() //delete the authentication
+                                                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                        @Override
+                                                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                                                            if (task.isSuccessful()) {
+                                                                                                dogRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                    @Override
+                                                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                                                        for (DataSnapshot ds3 : snapshot.getChildren()) {
+
+                                                                                                            if(ds3.child("userEmail").getValue().toString().equals(userEmail)){
+                                                                                                                ds3.getRef().removeValue(); //delete the dogs the user owens
+                                                                                                            }
+                                                                                                            if(ds3.child("share").getValue().toString().contains(userEmail)){
+                                                                                                                String keyId = ds3.getKey();
+                                                                                                                String shareString = ds3.child("share").getValue().toString();
+                                                                                                                ArrayList<String> shareList = new ArrayList<>(Arrays.asList(shareString.split(",")));
+                                                                                                                shareList.remove(String.valueOf(userEmail));
+                                                                                                                String newShareString = "";// = shareString.replace(userEmail,""); //delete the dogs that shared with him
+                                                                                                                for(String s : shareList){
+                                                                                                                    newShareString += s + ",";
+                                                                                                                }
+                                                                                                                newShareString = newShareString.replace(",,",",");
+                                                                                                                dogRef.child(keyId).child("share").setValue(newShareString);
+
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                    @Override
+                                                                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                                                    }
+                                                                                                });
+
+                                                                                                ds2.getRef().removeValue(); //delete the user from the realtime database
+                                                                                                finish();
+                                                                                                startActivity(new Intent(AdminPage.this, AdminPage.class));
+                                                                                                Toast.makeText(AdminPage.this, "User account deleted.", Toast.LENGTH_LONG).show();
+                                                                                                dialog.dismiss();
+                                                                                            }
+                                                                                        }
+                                                                                    });
+
+                                                                        } else {
+                                                                            Toast.makeText(AdminPage.this, "Log in Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                                                        }
+
+                                                                    }
+                                                                });
                                                     }
                                                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                                     @Override

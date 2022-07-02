@@ -34,33 +34,36 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MyDog extends AppCompatActivity {
 
     private static final String DOG = "Dog";
     private static final String USERS = "Users";
     private static final String UPLOADS = "dogs/";
-    public static String dogInUse;
-
-    private ImageView imgDog[] = new ImageView[9];
-    private ImageView imgDeleteDog[] = new ImageView[9];
+    public static String dogInUse, dogImage;
+    private ImageView imgDog[] = new ImageView[20];
+    private ImageView imgDeleteDog[] = new ImageView[20];
+    private ImageView imgName;
     private LinearLayout linearLayout;
     private View view;
     private TextView dogName, owenerName;
-    private TextView foodCounter[] = new TextView[9];
-    private TextView walkCounter[] = new TextView[9];
-    public Counters[] counters = new Counters[9];
-    private View[] views = new View[9];
+    private TextView foodCounter[] = new TextView[20];
+    private TextView walkCounter[] = new TextView[20];
+    public Counters[] counters = new Counters[20];
+    private View[] views = new View[20];
     private FirebaseDatabase database;
     private DatabaseReference dogRef, userRef;
     private StorageReference storageReference;
 
     public String email;
     public String owner;
-    public String imagesName[] = new String[9];
+    private boolean isShare = false;
+    public String imagesName[] = new String[20];
     private int  index = 0, index2 = 0;
-    private Bitmap bitmap[] = new Bitmap[9];
-    private File imgFile[] = new File[9];
+    private Bitmap bitmap[] = new Bitmap[20];
+    private File imgFile[] = new File[20];
 
 
     @Override
@@ -202,7 +205,6 @@ public class MyDog extends AppCompatActivity {
                                         index = 0;
                                         for (DataSnapshot ds2 : snapshot.getChildren()) {
                                             if (ds2.child("userEmail").getValue().equals(email) || ds2.child("share").getValue().toString().contains(email)) {
-
                                                 imgDog[index] = views[index].findViewById(R.id.dogImg);
                                                 imgDeleteDog[index] = views[index].findViewById(R.id.deleteImage);
                                                 imgDeleteDog[index].setOnClickListener(new View.OnClickListener() {
@@ -215,7 +217,21 @@ public class MyDog extends AppCompatActivity {
                                                                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                                                                     @Override
                                                                     public void onClick(DialogInterface dialog, int which) {
-                                                                        ds2.getRef().removeValue();
+                                                                        if((ds2.child("userEmail").getValue().equals(email))){
+                                                                            ds2.getRef().removeValue();
+                                                                        }else{
+                                                                            String keyId = ds2.getKey();
+                                                                            String shareString = ds2.child("share").getValue().toString();
+                                                                            ArrayList<String> shareList = new ArrayList<>(Arrays.asList(shareString.split(",")));
+                                                                            shareList.remove(String.valueOf(email));
+                                                                            String newShareString = "";
+                                                                            for(String s : shareList){
+                                                                                newShareString += s + ",";
+                                                                            }
+                                                                            //String newShareString = shareString.replace(email,""); //delete the dogs that shared with him
+                                                                            newShareString = newShareString.replace(",,",",");
+                                                                            dogRef.child(keyId).child("share").setValue(newShareString);
+                                                                        }
                                                                         finish();
                                                                         startActivity(new Intent(MyDog.this,MyDog.class));
                                                                         dialog.dismiss();
@@ -244,11 +260,16 @@ public class MyDog extends AppCompatActivity {
                                                                 }
                                                                 bitmap[index2] = BitmapFactory.decodeFile(imgFile[index2].getPath());
                                                                 imgDog[index2].setImageBitmap(bitmap[index2]);
-                                                                views[index2].findViewById(R.id.dogName).setOnClickListener(new View.OnClickListener() {
+                                                                views[index2].findViewById(R.id.dogImg).setOnClickListener(new View.OnClickListener() {
                                                                     @Override
                                                                     public void onClick(View v) {
-                                                                        dogName = v.findViewById(R.id.dogName);
-                                                                        dogInUse = dogName.getText().toString();
+                                                                        for(int i = 0;i < index; i++)
+                                                                            if(v == imgDog[i]){
+                                                                                imgName = v.findViewById(R.id.dogImg);
+                                                                                dogImage = imagesName[i];
+                                                                            }
+                                                                        //dogName = v.findViewById(R.id.dogName);
+                                                                        //dogInUse = dogName.getText().toString();
                                                                         startActivity(new Intent(MyDog.this, MainActivity.class));
                                                                     }
                                                                 });

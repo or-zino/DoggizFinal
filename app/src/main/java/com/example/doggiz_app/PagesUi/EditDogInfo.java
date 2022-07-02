@@ -100,7 +100,7 @@ public class EditDogInfo extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        if (MyDog.dogInUse.equals(ds.child("dogName").getValue().toString())) {
+                        if (MyDog.dogImage.equals(ds.child("imageName").getValue().toString())) {
                             dogName.setText(ds.child("dogName").getValue().toString());
                             imageName = ds.child("imageName").getValue(String.class);
                             breed.setText(ds.child("breed").getValue().toString());
@@ -164,7 +164,7 @@ public class EditDogInfo extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(dogName.getText().toString().isEmpty() ||  breed.getText().toString().isEmpty() || vetName.getText().toString().isEmpty() || dateOfBirth.getText().toString().isEmpty()){
+                if(dogName.getText().toString().isEmpty() ||  breed.getText().toString().isEmpty() || vetName.getText().toString().isEmpty() || dateOfBirth.getText().toString().isEmpty() || foods.getText().toString().isEmpty() || walks.getText().toString().isEmpty()){
                     Toast.makeText(EditDogInfo.this, "fields are empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -215,7 +215,7 @@ public class EditDogInfo extends AppCompatActivity {
                                 }
                             }
                         }
-                        MyDog.dogInUse = newName;
+                        //MyDog.dogInUse = newName;
                     }
 
                     @Override
@@ -225,6 +225,7 @@ public class EditDogInfo extends AppCompatActivity {
                 });
                 if(flag) {
                     Intent intent = new Intent(EditDogInfo.this, MainActivity.class);
+                    finish();
                     startActivity(intent);
                 }
             }
@@ -257,6 +258,7 @@ public class EditDogInfo extends AppCompatActivity {
     private void uploadFile(){
         if(mImageUri != null){
             String imageName = photoDogName;
+            MyDog.dogImage = imageName;
             StorageReference fileRefrence = storageReference.child(imageName);
 
             uploadTask = fileRefrence.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -266,6 +268,7 @@ public class EditDogInfo extends AppCompatActivity {
                     Toast.makeText(EditDogInfo.this, "upload finish", Toast.LENGTH_SHORT).show();
                     if(!flag){
                         Intent intent = new Intent(EditDogInfo.this, MainActivity.class);
+                        finish();
                         startActivity(intent);
                     }
                 }

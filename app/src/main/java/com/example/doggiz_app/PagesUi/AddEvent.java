@@ -4,10 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -25,6 +29,8 @@ import com.example.doggiz_app.Models.DBevent;
 import com.example.doggiz_app.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -34,6 +40,8 @@ public class AddEvent extends AppCompatActivity {
     EditText etTitle, etDesc;
     TextView tvDate;
     Button addButton;
+    String alertTime = " 14:43:00" ;    //every day before the event the time of alert will be 12PM
+    long oneDay = 86400000; //in ms
     public int pYear,pMonth,pDay;
     DatePickerDialog.OnDateSetListener setListener;
 
@@ -83,33 +91,28 @@ public class AddEvent extends AppCompatActivity {
                 String title   = etTitle.getText().toString().trim();
                 String description = etDesc.getText().toString().trim();
                 DateEvent dateEvent = new DateEvent(String.valueOf(pYear), String.valueOf(pMonth), String.valueOf(pDay), title, description, dogName, email);
-
-//                long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
-//                Date date = new GregorianCalendar(year, month - 1, day, 22, 58).getTime();
-//                Date notificationDate = new Date(date.getTime() - MILLIS_IN_A_DAY);
-
-                dbEvent.add(dateEvent).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(AddEvent.this, "Record is insert",Toast.LENGTH_SHORT).show();
-//                        scheduleNotification(AddEvent.this, notificationDate.getTime(), title, description);
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                    }
-                });
-
-
-
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+                String dateString = dateEvent.day.concat("-").concat(dateEvent.month).concat("-").concat(dateEvent.year).concat(alertTime);
+                Date notificationDate = null;
+                try {
+                    notificationDate = sdf.parse(dateString);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Date finalNotificationDate = notificationDate;
                 if(!title.equals("")) {
                     if(pYear != 0 && pMonth != 0 && pDay != 0) {
                         dbEvent.add(dateEvent).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                Toast.makeText(AddEvent.this, "Record is insert", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddEvent.this, "Record is insert",Toast.LENGTH_SHORT).show();
+                                long notificationDate = finalNotificationDate.getTime() - oneDay;
+                                scheduleNotification(AddEvent.this, notificationDate, "Reminder! tomorrow you have: " + title, description);
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             }
                         });
                     }else {
-                        Toast.makeText(AddEvent.this, "Please click on the calendar and choose a date!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddEvent.this, "Please click on the calendar to choose a date!", Toast.LENGTH_LONG).show();
                     }
                 } else{
                     Toast.makeText(AddEvent.this, "Please enter a title!", Toast.LENGTH_SHORT).show();
@@ -121,31 +124,29 @@ public class AddEvent extends AppCompatActivity {
 
 
     }
-    public static void scheduleNotification(Context context, long delay, String title, String content) {//delay is after how much time(in millis) from current time you want to schedule the notification
+    public void scheduleNotification(Context context, long delay, String title, String description) {//delay is after how much time(in millis) from current time you want to schedule the notification
+        createNotificationChannel();
         Intent intent = new Intent(context, NotificationReceiver.class);
         intent.putExtra("title", title);
-        intent.putExtra("text", content);
-        PendingIntent pending = PendingIntent.getBroadcast(context, 42, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        intent.putExtra("description", description);
+        PendingIntent pending = PendingIntent.getBroadcast(context, 0, intent, 0);
         // Schdedule notification
-        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, delay, pending);
-
-        /*NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setContentTitle((title))
-                .setContentText((content));
-
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent activity = PendingIntent.getActivity(context, Integer.parseInt(NotificationReceiver.NOTIFICATION_ID), intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        builder.setContentIntent(activity);
-
-        Notification notification = builder.build();
-
-        Intent notificationIntent = new Intent(context, NotificationReceiver.class);
-        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, notification);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, Integer.parseInt(NotificationReceiver.NOTIFICATION_ID), notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-        long futureInMillis = SystemClock.elapsedRealtime() + delay;
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);*/
+        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        manager.set(
+                AlarmManager.RTC_WAKEUP,
+                delay,
+                pending
+        );
+    }
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "notification";
+            String description = "calender notification";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notification", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }

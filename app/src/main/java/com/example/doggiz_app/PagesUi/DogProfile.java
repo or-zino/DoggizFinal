@@ -116,7 +116,7 @@ public class DogProfile extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds : snapshot.getChildren()) {
-                    if (MyDog.dogInUse.equals(ds.child("dogName").getValue().toString())) {
+                    if (MyDog.dogImage.equals(ds.child("imageName").getValue().toString())) {
                         dogName.setText(ds.child("dogName").getValue().toString());
                         imageName = ds.child("imageName").getValue(String.class);
                         breed.setText(ds.child("breed").getValue().toString());
@@ -130,6 +130,7 @@ public class DogProfile extends Fragment {
                         share = ds.child("share").getValue().toString();
                         shareDog = share;
 
+                        MyDog.dogInUse = dogName.getText().toString();
                         storageReference = FirebaseStorage.getInstance().getReference().child(UPLOADS + imageName);
                         try {
                             File imgFile = File.createTempFile("profile", ".jpg");
@@ -180,7 +181,7 @@ public class DogProfile extends Fragment {
                             dogRef.child(keyId).child("share").setValue(myText);
                         else
                             dogRef.child(keyId).child("share").setValue(share + "," + myText);
-                        Toast.makeText(getActivity(),dogName.getText() + " has been shared with " + myText, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),dogName.getText() + " has been shared with " + myText, Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -197,4 +198,5 @@ public class DogProfile extends Fragment {
 
         return v;
     }
+
 }

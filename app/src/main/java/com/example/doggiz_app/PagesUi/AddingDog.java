@@ -131,13 +131,46 @@ public class AddingDog extends AppCompatActivity {
                 String breed = etBreed.getText().toString().trim();
                 String vet = etVet.getText().toString().trim();
                 String dogDate = etDogDate.getText().toString().trim();
-                FoodAndWalks foodAndWalks = new FoodAndWalks(Integer.valueOf(eFeeds.getText().toString()),0,Integer.valueOf(eFeeds.getText().toString()),0);
 
                 if(TextUtils.isEmpty(dogName)){
-                    etDogName.setError("Please insert your name");
+                    etDogName.setError("Please insert your dog name");
                     etDogName.requestFocus();
                     return;
                 }
+
+                if(TextUtils.isEmpty(dogDate)){
+                    Toast.makeText(AddingDog.this, "Please insert your dog date of birth",Toast.LENGTH_SHORT).show();
+                    etDogDate.requestFocus();
+                    return;
+                }
+
+                if(TextUtils.isEmpty(breed)){
+                    Toast.makeText(AddingDog.this, "Please insert your dog breed",Toast.LENGTH_SHORT).show();
+                    etBreed.requestFocus();
+                    return;
+                }
+
+                if(TextUtils.isEmpty(vet)){
+                    vet = "Vet";
+                }
+
+                if(TextUtils.isEmpty(eWalks.getText().toString())){
+                    eWalks.setError("Please insert amount of walks the dog needs");
+                    eWalks.requestFocus();
+                    return;
+                }
+
+                if(TextUtils.isEmpty(eFeeds.getText().toString())){
+                    eFeeds.setError("Please insert amount of food the dog needs");
+                    eFeeds.requestFocus();
+                    return;
+                }
+
+
+
+                FoodAndWalks foodAndWalks = new FoodAndWalks(Integer.parseInt(eFeeds.getText().toString()),0,Integer.parseInt(eWalks.getText().toString()),0);
+
+
 
 
                 Dog dog = new Dog(dogName, breed, vet, dogDate, foodAndWalks, LogIn.email, PersonProfile.personName);
@@ -185,7 +218,7 @@ public class AddingDog extends AppCompatActivity {
         return mime.getExtensionFromMimeType(cr.getType(uri));
     }
 
-    private void uploadFile(){
+    private String uploadFile(){
         if(mImageUri != null){
             String imageName = photoDogName;
             StorageReference fileRefrence = storageReference.child(imageName);
@@ -193,11 +226,16 @@ public class AddingDog extends AppCompatActivity {
             uploadTask = fileRefrence.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(AddingDog.this, "upload finish", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(AddingDog.this, "upload finish", Toast.LENGTH_SHORT).show();
+
                 }
 
             });
-          }
+            return imageName;
+          } else {
+            Toast.makeText(this, "You didn't choose image for your dog", Toast.LENGTH_SHORT).show();
+            return null;
+        }
         }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

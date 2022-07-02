@@ -4,16 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +28,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,7 +50,7 @@ public class EditProfile extends AppCompatActivity {
     private static final String UPLOADS = "uploads/";
 
     private ImageView imProfile;
-    private TextView phone, address, instegram;
+    private TextView phone, address, instegram, passChange;
     private FirebaseDatabase database;
     private DatabaseReference userRef, editProfile;
     private StorageReference storageReference;
@@ -52,9 +58,8 @@ public class EditProfile extends AppCompatActivity {
     private  static final int PICK_IMAGE = 1;
     private static Uri mImageUri;
     private static StorageTask uploadTask;
-    public String email;
+    public String email, userId, myText;
     public static String  imageName;
-    public String userId;
     private static boolean flag;
 
     @Override
@@ -70,11 +75,12 @@ public class EditProfile extends AppCompatActivity {
         userRef     = database.getReference(USERS);
         editProfile = FirebaseDatabase.getInstance().getReference();
 
-        phone     = findViewById(R.id.editPhoneText);
-        address   = findViewById(R.id.editAddressText);
-        instegram = findViewById(R.id.editInstegramText);
-        imProfile = findViewById(R.id.editProfileImageView);
-        saveBtn   = findViewById(R.id.editProfileBtn);
+        phone      = findViewById(R.id.editPhoneText);
+        address    = findViewById(R.id.editAddressText);
+        instegram  = findViewById(R.id.editInstegramText);
+        imProfile  = findViewById(R.id.editProfileImageView);
+        saveBtn    = findViewById(R.id.editProfileBtn);
+        passChange = findViewById(R.id.passwordChangeText);
 
         imProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,8 +156,49 @@ public class EditProfile extends AppCompatActivity {
             }
         });
 
-    }
 
+        passChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                AlertDialog.Builder passwordDialog = new AlertDialog.Builder(EditProfile.this);
+                passwordDialog.setTitle("Please enter your new password");
+
+                final EditText newPassword = new EditText(EditProfile.this);
+                newPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                passwordDialog.setView(newPassword);
+
+                passwordDialog.setPositiveButton("Change!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        myText = newPassword.getText().toString();
+                        if(!(myText.length() < 6)) {
+                            user.updatePassword(myText).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful())
+                                        Toast.makeText(EditProfile.this, "Your password has changed!", Toast.LENGTH_SHORT).show();
+                                    else
+                                        Toast.makeText(EditProfile.this, "Your password did not changed!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            Toast.makeText(EditProfile.this, "Your password must have more then 6 char!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                        });
+                        passwordDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+
+                        });
+                passwordDialog.show();
+
+            }
+        });
+    }
 
 
 

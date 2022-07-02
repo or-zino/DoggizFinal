@@ -196,7 +196,6 @@ public class Register extends AppCompatActivity {
             uploadTask = fileRefrence.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(Register.this, "upload finish",Toast.LENGTH_SHORT).show();
                     Upload upload = new Upload("profile_" + mEmail.getText().toString().trim(), taskSnapshot.getMetadata().getPath());
                     String uploadId = databaseReference.push().getKey();
                     databaseReference.child(uploadId).setValue(upload);
@@ -204,7 +203,7 @@ public class Register extends AppCompatActivity {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(Register.this, e.getMessage(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register.this, "Error with image upload: " + e.getMessage(),Toast.LENGTH_LONG).show();
                 }
             });
             return imageName;
