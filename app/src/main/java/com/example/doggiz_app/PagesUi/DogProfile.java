@@ -38,6 +38,8 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DogProfile extends Fragment {
 
@@ -180,8 +182,24 @@ public class DogProfile extends Fragment {
                         if(share.equals(""))
                             dogRef.child(keyId).child("share").setValue(myText);
                         else
-                            dogRef.child(keyId).child("share").setValue(share + "," + myText);
-                        Toast.makeText(getActivity(),dogName.getText() + " has been shared with " + myText, Toast.LENGTH_LONG).show();
+                             {
+                                 String shareString = share;
+                                 ArrayList<String> shareList = new ArrayList<>(Arrays.asList(shareString.split(",")));
+                                 boolean dogShare = false;
+                                 for(String s : shareList){
+                                     if(s.equals(myText)){
+                                         dogShare =true;
+                                     }
+                                 }
+                                 if(!dogShare){
+                                     share += myText + ",";
+                                     share = share.replace(",,",",");
+                                     dogRef.child(keyId).child("share").setValue(share);
+                                     Toast.makeText(getActivity(), dogName.getText() + " has been shared with " + myText, Toast.LENGTH_LONG).show();
+                                 } else{
+                                     Toast.makeText(getActivity(), dogName.getText() + " already shared with " + myText, Toast.LENGTH_LONG).show();
+                                 }
+                            }
                     }
                 });
 

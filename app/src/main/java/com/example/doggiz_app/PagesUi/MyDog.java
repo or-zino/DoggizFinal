@@ -273,12 +273,18 @@ public class MyDog extends AppCompatActivity {
                                                                         startActivity(new Intent(MyDog.this, MainActivity.class));
                                                                     }
                                                                 });
+                                                                views[index2].findViewById(R.id.dogName).setOnClickListener(new View.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(View v) {
+                                                                        Toast.makeText(MyDog.this, "Please click on the image!", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                });
                                                                 index2++;
                                                             }
                                                         }).addOnFailureListener(new OnFailureListener() {
                                                             @Override
                                                             public void onFailure(@NonNull Exception e) {
-                                                                Toast.makeText(MyDog.this, "213Error Occurred", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(MyDog.this, "Error Occurred", Toast.LENGTH_SHORT).show();
                                                             }
                                                         });
 

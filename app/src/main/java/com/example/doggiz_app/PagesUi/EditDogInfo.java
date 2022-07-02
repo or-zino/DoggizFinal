@@ -265,7 +265,7 @@ public class EditDogInfo extends AppCompatActivity {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     editDog.child(DOG).child(dogId).child("imageName").setValue(photoDogName);
-                    Toast.makeText(EditDogInfo.this, "upload finish", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(EditDogInfo.this, "upload finish", Toast.LENGTH_SHORT).show();
                     if(!flag){
                         Intent intent = new Intent(EditDogInfo.this, MainActivity.class);
                         finish();
