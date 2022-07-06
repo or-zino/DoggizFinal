@@ -31,6 +31,8 @@ import org.naishadhparmar.zcustomcalendar.OnDateSelectedListener;
 import org.naishadhparmar.zcustomcalendar.OnNavigationButtonClickedListener;
 import org.naishadhparmar.zcustomcalendar.Property;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -133,12 +135,13 @@ public class Events extends Fragment  implements OnNavigationButtonClickedListen
         customCalendar.setOnNavigationButtonClickedListener(CustomCalendar.PREVIOUS, this);
         customCalendar.setOnNavigationButtonClickedListener(CustomCalendar.NEXT, this);
 
+        ArrayList<String> shareList = new ArrayList<>(Arrays.asList(DogProfile.shareDog.split(",")));
         eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 for(DataSnapshot ds : snapshot.getChildren()){
-                    if(ds.child("ownerEmail").getValue().equals(email) || DogProfile.shareDog.contains(email)) {
+                    if(ds.child("ownerEmail").getValue().equals(email) || checkUserIsShare(shareList)) {
                         if (ds.child("dogName").getValue().equals(MyDog.dogInUse)) {
                             String x = String.valueOf(calendar.get(Calendar.MONTH) + 1);
                             String y = ds.child("month").getValue().toString();
@@ -336,18 +339,14 @@ public class Events extends Fragment  implements OnNavigationButtonClickedListen
 
             }
         });
-//            case Calendar.J
-//            case Calendar.AUGUST:
-//                arr[0] = new HashMap<>(); //This is the map linking a date to its description
-//                arr[0].put(3, "absent");
-//                arr[1] = null; //Optional: This is the map linking a date to its tag.
-//                break;
-//            case Calendar.JUNE:
-//                arr[0] = new HashMap<>();
-//                arr[0].put(5, "absent");
-//                arr[1] = null;
-//                break;
-       // }
         return arr;
+    }
+
+    public boolean checkUserIsShare(ArrayList<String> shareString){
+        for(String s : shareString){
+            if(s.equals(email))
+                return true;
+        }
+        return false;
     }
 }

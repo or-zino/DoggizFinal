@@ -198,13 +198,12 @@ public class MyDog extends AppCompatActivity {
                                         }
                                     }
 
-
                                 dogRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot snapshot) {
                                         index = 0;
                                         for (DataSnapshot ds2 : snapshot.getChildren()) {
-                                            if (ds2.child("userEmail").getValue().equals(email) || ds2.child("share").getValue().toString().contains(email)) {
+                                            if (ds2.child("userEmail").getValue().equals(email) || checkUserIsShare(ds2.child("share").getValue().toString())) {
                                                 imgDog[index] = views[index].findViewById(R.id.dogImg);
                                                 imgDeleteDog[index] = views[index].findViewById(R.id.deleteImage);
                                                 imgDeleteDog[index].setOnClickListener(new View.OnClickListener() {
@@ -268,8 +267,6 @@ public class MyDog extends AppCompatActivity {
                                                                                 imgName = v.findViewById(R.id.dogImg);
                                                                                 dogImage = imagesName[i];
                                                                             }
-                                                                        //dogName = v.findViewById(R.id.dogName);
-                                                                        //dogInUse = dogName.getText().toString();
                                                                         startActivity(new Intent(MyDog.this, MainActivity.class));
                                                                     }
                                                                 });
@@ -345,4 +342,14 @@ public class MyDog extends AppCompatActivity {
                 .create();
         dlg.show();
     }
+
+    public boolean checkUserIsShare(String shareString){
+        ArrayList<String> shareList = new ArrayList<>(Arrays.asList(shareString.split(",")));
+        for(String s : shareList){
+            if(s.equals(email))
+                return true;
+        }
+        return false;
+    }
+
 }

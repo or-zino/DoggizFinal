@@ -22,6 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class RemoveMedicalBag extends AppCompatActivity {
 
     private View medicCard;
@@ -29,6 +32,7 @@ public class RemoveMedicalBag extends AppCompatActivity {
     ImageView iconTre;
     TextView title, description;
     private static final String MED= "MedicalCard";
+    public String email = LogIn.email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +44,7 @@ public class RemoveMedicalBag extends AppCompatActivity {
         FirebaseDatabase database;
         DatabaseReference medRef;
         StorageReference storageReference;
-        String email = LogIn.email;
+
 
         database = FirebaseDatabase.getInstance();
         medRef = database.getReference(MED);
@@ -51,9 +55,9 @@ public class RemoveMedicalBag extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 linearLayout = findViewById(R.id.medicalRemoveBagLinear);
                 linearLayout.removeAllViews();
-
+                ArrayList<String> shareList = new ArrayList<>(Arrays.asList(DogProfile.shareDog.split(",")));
                 for(DataSnapshot ds : snapshot.getChildren()){
-                    if(ds.child("ownerEmail").getValue().equals(email)) {
+                    if(ds.child("ownerEmail").getValue().equals(email) || checkUserIsShare(shareList)) {
                         if(ds.child("dogName").getValue().equals(MyDog.dogInUse)){
 
                             medicCard = getLayoutInflater().inflate(R.layout.item_info, null);
@@ -112,5 +116,14 @@ public class RemoveMedicalBag extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
         });
+    }
+
+
+    public boolean checkUserIsShare(ArrayList<String> shareString){
+        for(String s : shareString){
+            if(s.equals(email))
+                return true;
+        }
+        return false;
     }
 }

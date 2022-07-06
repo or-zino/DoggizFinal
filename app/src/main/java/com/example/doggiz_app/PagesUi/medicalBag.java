@@ -21,12 +21,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class medicalBag extends Fragment {
 
     private View medicCard;
     LinearLayout linearLayout;
     ImageView addMed, iconTre, deleteMedical;
     TextView title, description;
+    public String email = LogIn.email;
 
     private static final String MED= "MedicalCard";
 
@@ -62,7 +66,7 @@ public class medicalBag extends Fragment {
         FirebaseDatabase database;
         DatabaseReference medRef;
         StorageReference storageReference;
-        String email = LogIn.email;
+
 
 
         database = FirebaseDatabase.getInstance();
@@ -77,9 +81,9 @@ public class medicalBag extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 linearLayout = v.findViewById(R.id.medicalBagLinear);
                 linearLayout.removeAllViews();
-
+                ArrayList<String> shareList = new ArrayList<>(Arrays.asList(DogProfile.shareDog.split(",")));
                 for(DataSnapshot ds : snapshot.getChildren()){
-                    if(ds.child("ownerEmail").getValue().equals(email) || DogProfile.shareDog.contains(email)) {
+                    if(ds.child("ownerEmail").getValue().equals(email) || checkUserIsShare(shareList)) {
                         if(ds.child("dogName").getValue().equals(MyDog.dogInUse)){
 
                             medicCard = getLayoutInflater().inflate(R.layout.item_info, null);
@@ -127,13 +131,15 @@ public class medicalBag extends Fragment {
             }
         });
 
-
-
-
-
-
-
-
         return v;
     }
+
+    public boolean checkUserIsShare(ArrayList<String> shareString){
+        for(String s : shareString){
+            if(s.equals(email))
+                return true;
+        }
+        return false;
+    }
+
 }

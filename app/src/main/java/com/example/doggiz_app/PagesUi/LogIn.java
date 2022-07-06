@@ -20,6 +20,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Locale;
+
 public class LogIn extends AppCompatActivity {
 
     EditText  mEmail, mPassword;
@@ -54,7 +56,7 @@ public class LogIn extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                email = mEmail.getText().toString().trim();
+                email = mEmail.getText().toString().trim().toLowerCase(Locale.ROOT);
                 String password = mPassword.getText().toString().trim();
 
                 if(TextUtils.isEmpty(email)){
