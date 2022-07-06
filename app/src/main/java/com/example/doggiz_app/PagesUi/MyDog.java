@@ -97,7 +97,7 @@ public class MyDog extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     for (DataSnapshot ds2 : snapshot.getChildren()) {
-                                        if (ds2.child("userEmail").getValue().equals(email) || ds2.child("share").getValue().toString().contains(email)) {
+                                        if (ds2.child("userEmail").getValue().equals(email) || checkUserIsShare(ds2.child("share").getValue().toString())) {
 
                                             linearLayout = findViewById(R.id.myDogsLayout);
                                             view = getLayoutInflater().inflate(R.layout.item_image, null);

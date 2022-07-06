@@ -180,7 +180,7 @@ public class DogProfile extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         myText = emailShare.getText().toString();
                         if(share.equals(""))
-                            dogRef.child(keyId).child("share").setValue(myText);
+                            dogRef.child(keyId).child("share").setValue(myText + ",");
                         else
                              {
                                  String shareString = share;
