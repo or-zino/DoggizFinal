@@ -103,22 +103,12 @@ public class DogProfile extends Fragment {
             }
         });
 
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds : snapshot.getChildren()){
-                    owenerName.setText(ds.child("fullName").getValue().toString());
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
-
         dogRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds : snapshot.getChildren()) {
                     if (MyDog.dogImage.equals(ds.child("imageName").getValue().toString())) {
+                        owenerName.setText(ds.child("ownerName").getValue().toString());
                         dogName.setText(ds.child("dogName").getValue().toString());
                         imageName = ds.child("imageName").getValue(String.class);
                         breed.setText(ds.child("breed").getValue().toString());
@@ -179,8 +169,10 @@ public class DogProfile extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         myText = emailShare.getText().toString();
-                        if(share.equals(""))
+                        if(share.equals("")) {
                             dogRef.child(keyId).child("share").setValue(myText + ",");
+                            Toast.makeText(getActivity(), dogName.getText() + " has been shared with " + myText, Toast.LENGTH_LONG).show();
+                        }
                         else
                              {
                                  String shareString = share;

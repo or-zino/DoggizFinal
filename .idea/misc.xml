@@ -41,7 +41,7 @@
         <entry key="app/src/main/res/layout/default_view.xml" value="0.32971014492753625" />
         <entry key="app/src/main/res/layout/fragment_adding_medical_bag.xml" value="0.371875" />
         <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_dog_profile.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/fragment_dog_profile.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_events.xml" value="0.2874873353596758" />
         <entry key="app/src/main/res/layout/fragment_map.xml" value="0.2874873353596758" />
         <entry key="app/src/main/res/layout/fragment_medical_bag.xml" value="0.2874873353596758" />

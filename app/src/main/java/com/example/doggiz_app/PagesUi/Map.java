@@ -49,7 +49,7 @@ public class Map extends Fragment {
         ivVet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mapChoose = "veterinarians";
+                mapChoose = "veterinary_care";
                 Intent intent = new Intent(getActivity(), MapBack.class);
                 startActivity(intent);
             }
@@ -58,7 +58,7 @@ public class Map extends Fragment {
         ivPark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mapChoose = "dog park";
+                mapChoose = "park";
                 Intent intent = new Intent(getActivity(),MapBack.class);
                 startActivity(intent);
             }
